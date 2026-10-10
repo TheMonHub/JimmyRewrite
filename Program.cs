@@ -14,11 +14,10 @@ using CommandsModule = JimmyRewrite.Commands.CommandsModule;
 
 namespace JimmyRewrite;
 
-// TODO: Use Catbox.net library to store attachment so that they lasts forever.
-
 internal static class Program
 {
     public static ConfigurationManager ConfigManager { get; private set; } = null!;
+    public static readonly HttpClient Client = new();
     public static async Task Main(string[] args)
     {
         var builder = Host.CreateApplicationBuilder(args);

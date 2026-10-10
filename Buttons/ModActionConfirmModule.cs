@@ -27,7 +27,7 @@ public class ModActionConfirmModule : ComponentInteractionModule<ComponentIntera
         return context.Interaction.SendResponseAsync(
             InteractionCallback.Message(
                 new InteractionMessageProperties()
-                    .WithContent(":x: Attachment has expired! Please send again!")
+                    .WithContent(":x: Attachment has expired! Please send the command again!")
             )
         );
     }

@@ -8,8 +8,6 @@ namespace JimmyRewrite.Commands;
 
 public partial class CommandsModule
 {
-    private static readonly HttpClient Client = new();
-    
     private enum CoinSides
     {
         Heads = 1,
@@ -71,7 +69,7 @@ public partial class CommandsModule
         var catKey = Program.ConfigManager["TheCatApi:Key"];
         request.Headers.Add("x-api-key", catKey);
 
-        var response = await Client.SendAsync(request);
+        var response = await Program.Client.SendAsync(request);
         response.EnsureSuccessStatusCode();
         var responseBody = await response.Content.ReadAsStringAsync();
         using var jsonDoc = JsonDocument.Parse(responseBody);
@@ -85,7 +83,7 @@ public partial class CommandsModule
             
         var request = new HttpRequestMessage(HttpMethod.Get, "https://dog.ceo/api/breeds/image/random");
 
-        var response = await Client.SendAsync(request);
+        var response = await Program.Client.SendAsync(request);
         response.EnsureSuccessStatusCode();
         var responseBody = await response.Content.ReadAsStringAsync();
         using var jsonDoc = JsonDocument.Parse(responseBody);
