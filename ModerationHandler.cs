@@ -70,7 +70,7 @@ public static class ModerationHandler
     public static async Task LogTempUnban(ulong guildId, ulong who, RestClient client)
     {
         var user = await client.RestClient.Users.GetAsync(who);
-        var dmChannel = user.GetDMChannelAsync();
+        var dmChannel = await user.GetDMChannelAsync();
         
         var logModChannel = Database.Database.GetLogModChannel(guildId);
         if (logModChannel == null)
