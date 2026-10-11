@@ -24,7 +24,7 @@ internal static class Program
         ConfigManager = builder.Configuration;
         builder.Services.AddDiscordGateway(options =>
         {
-            options.Intents = GatewayIntents.Guilds | GatewayIntents.MessageContent | GatewayIntents.GuildMessages | GatewayIntents.GuildUsers;
+            options.Intents = GatewayIntents.Guilds | GatewayIntents.MessageContent | GatewayIntents.GuildMessages | GatewayIntents.GuildUsers | GatewayIntents.DirectMessages;
         });
 
         builder.Services.AddApplicationCommands();
