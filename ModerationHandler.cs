@@ -183,12 +183,27 @@ public static class ModerationHandler
     private static async Task LogCase(Case caseData, ulong guildId, Color color, RestClient client)
     {
         var logModChannel = Database.Database.GetLogModChannel(guildId);
+        
+        var user = await client.RestClient.Users.GetAsync(caseData.userId);
+        var dmChannel = await user.GetDMChannelAsync();
+        
         if (logModChannel == null)
         {
             return;
         }
         
         await client.SendMessageAsync((ulong)logModChannel, GetCaseEmbed(caseData, guildId, color));
+
+        try {
+            await dmChannel.SendMessageAsync((ulong)logModChannel, GetCaseEmbed(caseData, guildId, color));
+        }
+        catch (RestException e)
+        {
+            if (e.StatusCode != HttpStatusCode.NotFound && e.StatusCode != HttpStatusCode.Forbidden)
+            {
+                throw;
+            }
+        }
     }
 
     public static async Task DoModAction(ulong guildId, ModAction action, RestClient client)
