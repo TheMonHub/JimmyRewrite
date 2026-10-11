@@ -9,8 +9,6 @@ using NetCord.Rest;
 
 namespace JimmyRewrite;
 
-// TODO: Send DM to user after a punishment in LogCase (LogTempUnban completed)
-
 public static class ModerationHandler
 {
     public enum PunishmentType
