@@ -9,7 +9,7 @@ using NetCord.Rest;
 
 namespace JimmyRewrite;
 
-// TODO: Send DM to user after a punishment in LogTempUnban and LogCase
+// TODO: Send DM to user after a punishment in LogCase (LogTempUnban completed)
 
 public static class ModerationHandler
 {
@@ -69,6 +69,9 @@ public static class ModerationHandler
 
     public static async Task LogTempUnban(ulong guildId, ulong who, RestClient client)
     {
+        var user = await client.RestClient.Users.GetAsync(who);
+        var dmChannel = user.GetDMChannelAsync();
+        
         var logModChannel = Database.Database.GetLogModChannel(guildId);
         if (logModChannel == null)
         {
@@ -85,11 +88,29 @@ public static class ModerationHandler
             ])
             .WithTimestamp(DateTime.UtcNow)
             .WithColor(Colors.Blue);
+
+        var dmEmbed = new EmbedProperties()
+            .WithTitle("Your Temporary Ban Has Expired")
+            .WithTimestamp(DateTime.UtcNow)
+            .WithColor(Colors.Blue);
         
         var messageProperties = new MessageProperties().AddEmbeds(embed);
+        var dmMessageProperties = new MessageProperties().AddEmbeds(dmEmbed);
+        
         try
         {
-            await client.SendMessageAsync((ulong)logModChannel, messageProperties);
+            await client.SendMessageAsync((ulong)logModChannel, messageProperties)
+        }
+        catch (RestException e)
+        {
+            if (e.StatusCode != HttpStatusCode.NotFound && e.StatusCode != HttpStatusCode.Forbidden)
+            {
+                throw;
+            }
+        }
+        try
+        {
+             await dmChannel.SendMessageAsync(dmMessageProperties);
         }
         catch (RestException e)
         {
