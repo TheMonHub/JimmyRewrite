@@ -184,7 +184,7 @@ public static class ModerationHandler
     {
         var logModChannel = Database.Database.GetLogModChannel(guildId);
         
-        var user = await client.GetUserAsync(caseData.userId);
+        var user = await client.GetUserAsync(caseData.UserId);
         var dmChannel = await user.GetDMChannelAsync();
         
         if (logModChannel == null)
