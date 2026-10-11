@@ -69,7 +69,7 @@ public static class ModerationHandler
 
     public static async Task LogTempUnban(ulong guildId, ulong who, RestClient client)
     {
-        var user = await client.RestClient.Users.GetAsync(who);
+        var user = await client.GetUserAsync(who);
         var dmChannel = await user.GetDMChannelAsync();
         
         var logModChannel = Database.Database.GetLogModChannel(guildId);
@@ -99,7 +99,7 @@ public static class ModerationHandler
         
         try
         {
-            await client.SendMessageAsync((ulong)logModChannel, messageProperties)
+            await client.SendMessageAsync((ulong)logModChannel, messageProperties);
         }
         catch (RestException e)
         {
@@ -184,7 +184,7 @@ public static class ModerationHandler
     {
         var logModChannel = Database.Database.GetLogModChannel(guildId);
         
-        var user = await client.RestClient.Users.GetAsync(caseData.userId);
+        var user = await client.GetUserAsync(caseData.userId);
         var dmChannel = await user.GetDMChannelAsync();
         
         if (logModChannel == null)
