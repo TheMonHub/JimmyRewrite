@@ -278,7 +278,7 @@ public static class Database
     /// <exception cref="Exception">
     /// The rule does not exist.
     /// </exception>
-    public static Case AddCase(ulong guildId, ulong userId, ModerationHandler.PunishmentType type, int[] ruleIds, ulong modUid, string? note, long time, long? tBanExpire, string? image = null)
+    public static Case AddCase(ulong guildId, ulong userId, ModerationHandler.PunishmentType type, int[] ruleIds, ulong modUid, string? note, long time, long? tBanExpire, bool? dmSuccess = false, string? image = null)
     {
         CreateGuildDatIfNotExists(guildId);
         
@@ -301,10 +301,11 @@ public static class Database
         command.Parameters.AddWithValue("Note", (object?)note ?? DBNull.Value);
         command.Parameters.AddWithValue("Time", time);
         command.Parameters.AddWithValue("TBanExpire", (object?)tBanExpire ?? DBNull.Value);
+        command.Parameters.AddWithValue("DMSuccess", dmSuccess);
         command.Parameters.AddWithValue("Img", (object?)image ?? DBNull.Value);
         command.ExecuteNonQuery();
         
-        return new Case(0, userId, type, ruleIds, ruleTitle, modUid, note, time, tBanExpire, image);
+        return new Case(0, userId, type, ruleIds, ruleTitle, modUid, note, time, tBanExpire, dmSuccess, image);
     }
 
     public static void ClearCases(ulong guildId)

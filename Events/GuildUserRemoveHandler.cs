@@ -18,8 +18,32 @@ public class GuildUserRemoveHandler(GatewayClient client) : IGuildUserRemoveGate
             return;
         }
 
-        var message = new MessageProperties()
-            .WithContent($"<@{arg.User.Id}> ({arg.User.Id}) left the server");
+        var rolesField = GetRoles(arg.User, arg.Guild)
+
+        Console.WriteLine(rolesList);
+
+        let rolesField;
+        if (rolesList is List<T>) {
+            rolesList = rolesList.ToArray();
+        }
+        foreach (element in rolesList) {
+            rolesField += $'<@&{element}>;
+            if (rolesList.indexOf(element) != rolesList.Length - 1) {
+                rolesField += ', ';
+            }
+        }
+
+        var embed = new EmbedProperties()
+            .WithTitle($"<@{arg.User.Id}> left the server")
+            .WithFields([
+                new EmbedFieldProperties()
+                    .WithName("Roles")
+                    .WithValue(rolesField)
+            ])
+            .WithFooter($"Id - {arg.User.Id}")
+            .WithTimestamp(DateTime.UtcNow);
+        
+        var message = new MessageProperties().AddEmbeds(embed);
 
         try
         {

@@ -252,6 +252,12 @@ public static class ModerationHandler
                 .WithInline()
             );
         }
+
+        embedFields.Add(new EmbedFieldProperties()
+                .WithName("User DM'd")
+                .WithValue(caseData.dmSuccess)
+                .WithInline()
+            );
         
         var embed = new EmbedProperties()
             .WithTitle($"You have been {GetPunishmentTypeEd(caseData.PunishmentType)} In {guild.Name}")
@@ -281,9 +287,11 @@ public static class ModerationHandler
         var dmChannel = await user.GetDMChannelAsync();
         try {
             await dmChannel.SendMessageAsync(await GetCaseDmEmbed(caseData, guildId, color, client));
+            caseData.dmSuccess = true;
         }
         catch (RestException e)
         {
+            caseData.dmSuccess = false;
             if (e.StatusCode != HttpStatusCode.NotFound && e.StatusCode != HttpStatusCode.Forbidden)
             {
                 throw;
@@ -390,6 +398,7 @@ public static class ModerationHandler
                     note,
                     startDate,
                     null,
+                    false,
                     uploadedImage),
                 guildId,
                 Colors.Red,
@@ -413,6 +422,7 @@ public static class ModerationHandler
                 note,
                 startDate,
                 banDuration,
+                false,
                 uploadedImage),
             guildId,
             Colors.Red,

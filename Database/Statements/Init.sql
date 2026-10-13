@@ -45,6 +45,7 @@ CREATE TABLE IF NOT EXISTS cases (
     note TEXT,
     time INTEGER NOT NULL,
     tban_expire INTEGER,
+    dm_status BOOLEAN,
     img TEXT,
     PRIMARY KEY (id, gid),
     FOREIGN KEY (gid) REFERENCES guild_dat (gid) ON DELETE CASCADE
